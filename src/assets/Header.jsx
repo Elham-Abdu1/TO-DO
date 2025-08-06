@@ -2,13 +2,12 @@ function Header(){
     return(
         <div>
             
-        <nav>
-            <ul>
-                <li><a href="#"></a>Home</li>
-                <li>Tasks</li>
-                <li>Explore</li>
-                <li>About</li>
-
+        <nav className="navbar">
+            <ul className="nav-list">
+                <li className="nav-item"><a href="#">Home</a></li>
+                <li className="nav-item"><a href="#">Tasks</a></li>
+                <li className="nav-item"><a href="#">Explore</a></li>
+                <li className="nav-item"><a href="#">About</a></li>
             </ul>
         </nav>
         <h1>Welcome to My islamic To-Do App</h1>
