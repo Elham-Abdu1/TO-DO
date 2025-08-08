@@ -1,6 +1,7 @@
 function Header(){
     return(
-        <div>
+        
+         <div>
             
         <nav className="navbar">
             <ul className="nav-list">
@@ -10,7 +11,7 @@ function Header(){
                 <li className="nav-item"><a href="#">About</a></li>
             </ul>
         </nav>
-        <h1>Welcome to My islamic To-Do App</h1>
+        
         </div>
         
     );
