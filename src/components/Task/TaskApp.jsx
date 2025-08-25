@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import TaskForm from "./TaskForm";
+import TaskCard from "./TaskCard";
+import "./TaskApp.css"; 
+
 
 const TaskApp = () => {
-  const [tasks, setTasks] = useState([]); // State for all tasks
+  const [tasks, setTasks] = useState([]);
 
   const handleAddTask = (formData) => {
     const newTask = {
-      id: Date.now(), // unique ID
+      id: Date.now(),
       title: formData.title,
       description: formData.description,
       dueDate: formData.dueDate,
@@ -14,32 +17,23 @@ const TaskApp = () => {
       completed: false,
     };
 
-    // Add new task at the beginning
     setTasks([newTask, ...tasks]);
-
-    // Log entire task list for verification
     console.log("Updated Task List:", [newTask, ...tasks]);
   };
 
   return (
-    <div className="container">
-      <h1 className="title">
-        Task <span className="Task-text">Manager</span>
+    <div className="app-container">
+      <h1 className="app-title">
+        Task <span className="highlight">Manager</span>
       </h1>
 
-      {/* Pass handleAddTask as onSubmit prop */}
       <TaskForm onSubmit={handleAddTask} />
 
-      <ul>
+      <div className="task-list">
         {tasks.map((task) => (
-          <li key={task.id} className="list-item">
-            <strong>{task.title}</strong> - {task.description}  
-            <br />
-            Due: {task.dueDate} | Priority: {task.priority} |{" "}
-            {task.completed ? "✅ Completed" : "⏳ Pending"}
-          </li>
+          <TaskCard key={task.id} task={task} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

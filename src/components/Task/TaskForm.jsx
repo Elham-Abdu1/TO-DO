@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './TaskForm.css'
+import "./TaskForm.css";
 
 const TaskForm = ({ onSubmit }) => {
   const [title, setTitle] = useState("");
@@ -17,10 +17,8 @@ const TaskForm = ({ onSubmit }) => {
       priority,
     };
 
-    // Call parent function (lifting state up)
     onSubmit(formData);
 
-    // Reset form after submit
     setTitle("");
     setDescription("");
     setDueDate("");
@@ -29,54 +27,48 @@ const TaskForm = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit} className="task-form">
-      <div>
-        <label>
-          Title (required):
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </label>
+      <div className="form-group">
+        <label>Title (required):</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
       </div>
 
-      <div>
-        <label>
-          Description (optional):
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </label>
+      <div className="form-group">
+        <label>Description (optional):</label>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
       </div>
 
-      <div>
-        <label>
-          Due Date:
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-          />
-        </label>
+      <div className="form-group">
+        <label>Due Date:</label>
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+        />
       </div>
 
-      <div>
-        <label>
-          Priority:
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </label>
+      <div className="form-group">
+        <label>Priority:</label>
+        <select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        >
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
       </div>
 
-      <button type="submit">Add Task</button>
+      <button type="submit" className="btn-submit">
+        Add Task
+      </button>
     </form>
   );
 };

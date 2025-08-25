@@ -1,53 +1,46 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  margin: 0;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  color: #4a4a4a;
+.task-form {
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
   margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
-form {
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 25px;
-  max-width: 400px;
-  margin: auto;
+.form-group {
+  margin-bottom: 12px;
 }
 
 label {
   display: block;
-  margin-bottom: 8px;
-  color: #333;
-  font-weight: 600;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #444;
 }
 
-input[type="text"],
-input[type="date"],
-textarea,
-select {
+input, textarea, select {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
+  padding: 8px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  font-size: 0.95rem;
 }
 
-button {
-  background-color: #28a745;
-  color: white;
+textarea {
+  resize: vertical;
+}
+
+.btn-submit {
+  background: #0077cc;
+  color: #fff;
+  padding: 10px;
   border: none;
-  padding: 12px 15px;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  width: 100%;
+  transition: 0.2s ease;
 }
 
-button:hover {
-  background-color: #218838;
+.btn-submit:hover {
+  background: #005fa3;
 }
