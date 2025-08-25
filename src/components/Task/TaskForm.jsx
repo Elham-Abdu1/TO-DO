@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./TaskForm.css";
 
-const TaskForm = ({ onSubmit }) => {
+const TaskForm = ({ onSubmit, initialTask }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState("Low");
+
+  // When editing, pre-fill the form
+  useEffect(() => {
+    if (initialTask) {
+      setTitle(initialTask.title);
+      setDescription(initialTask.description || "");
+      setDueDate(initialTask.dueDate || "");
+      setPriority(initialTask.priority || "Low");
+    }
+  }, [initialTask]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,6 +29,7 @@ const TaskForm = ({ onSubmit }) => {
 
     onSubmit(formData);
 
+    // Reset after submit
     setTitle("");
     setDescription("");
     setDueDate("");
@@ -67,7 +78,7 @@ const TaskForm = ({ onSubmit }) => {
       </div>
 
       <button type="submit" className="btn-submit">
-        Add Task
+        {initialTask ? "Update Task" : "Add Task"}
       </button>
     </form>
   );

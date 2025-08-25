@@ -1,7 +1,7 @@
 import React from "react";
 import "./TaskCard.css";
 
-const TaskCard = ({ task }) => {
+const TaskCard = ({ task, onToggleComplete, onDelete, onEdit }) => {
   return (
     <div className={`task-card ${task.completed ? "completed" : ""}`}>
       {/* Title */}
@@ -25,6 +25,22 @@ const TaskCard = ({ task }) => {
       {/* Completion status */}
       <div className="task-status">
         {task.completed ? "✅ Completed" : "⏳ Pending"}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="task-actions">
+        <button
+          className="btn-complete"
+          onClick={() => onToggleComplete(task.id)}
+        >
+          {task.completed ? "Undo" : "Complete"}
+        </button>
+        <button className="btn-edit" onClick={() => onEdit(task.id)}>
+          Edit
+        </button>
+        <button className="btn-delete" onClick={() => onDelete(task.id)}>
+          Delete
+        </button>
       </div>
     </div>
   );
