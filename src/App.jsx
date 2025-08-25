@@ -60,13 +60,14 @@
 
 
 import React from 'react';
-import TaskForm from './components/Task/TaskForm.jsx';
+import TaskApp from './components/Task/TaskApp.jsx';
+
 
 const App = () => {
   return (
     <div>
-      <h1>Task Manager</h1>
-      <TaskForm />
+       
+      <TaskApp />
     </div>
   );
 };
