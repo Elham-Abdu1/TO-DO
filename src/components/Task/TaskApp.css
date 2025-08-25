@@ -1,20 +1,35 @@
-.app-container {
+.task-app {
   max-width: 700px;
-  margin: 0 auto;
+  margin: auto;
   padding: 20px;
-}
-
-.app-title {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
 }
 
-.highlight {
-  color: #0077cc;
+h1 {
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .task-list {
   display: flex;
   flex-direction: column;
+  gap: 15px;
+}
+
+.empty-message {
+  font-size: 1.2rem;
+  color: #777;
+  background: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.all-done-message {
+  font-size: 1.2rem;
+  color: green;
+  font-weight: bold;
+  background: #e6ffe6;
+  padding: 15px;
+  border-radius: 8px;
 }

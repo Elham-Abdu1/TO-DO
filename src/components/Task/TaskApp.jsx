@@ -5,66 +5,66 @@ import "./TaskApp.css";
 
 const TaskApp = () => {
   const [tasks, setTasks] = useState([]);
-  const [taskToEdit, setTaskToEdit] = useState(null); // holds the task being edited
+  const [taskToEdit, setTaskToEdit] = useState(null);
 
-  const handleAddTask = (formData) => {
+  // Add task
+  const handleAddTask = (task) => {
     if (taskToEdit) {
-      // Editing existing task
-      const updatedTasks = tasks.map((task) =>
-        task.id === taskToEdit.id ? { ...task, ...formData } : task
-      );
-      setTasks(updatedTasks);
-      setTaskToEdit(null); // reset after editing
+      handleEditTask(taskToEdit.id, task);
+      setTaskToEdit(null);
     } else {
-      // Adding new task
-      const newTask = {
-        id: Date.now(),
-        ...formData,
-        completed: false,
-      };
-      setTasks([newTask, ...tasks]);
+      setTasks([...tasks, { ...task, id: Date.now(), completed: false }]);
     }
-    console.log("Updated Task List:", tasks);
   };
 
+  // Toggle complete
   const handleToggleComplete = (taskId) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, completed: !task.completed } : task
+    setTasks(
+      tasks.map((task) =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task
+      )
     );
-    setTasks(updatedTasks);
   };
 
+  // Delete task
   const handleDeleteTask = (taskId) => {
-    const filteredTasks = tasks.filter((task) => task.id !== taskId);
-    setTasks(filteredTasks);
+    setTasks(tasks.filter((task) => task.id !== taskId));
   };
 
-  const handleEditTask = (taskId) => {
-    const task = tasks.find((t) => t.id === taskId);
-    if (task) {
-      setTaskToEdit(task);
-    }
+  // Edit task
+  const handleEditTask = (taskId, updatedTaskData) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === taskId ? { ...task, ...updatedTaskData } : task
+      )
+    );
   };
+
+  // Derived state
+  const allCompleted = tasks.length > 0 && tasks.every((task) => task.completed);
 
   return (
-    <div className="app-container">
-      <h1 className="app-title">
-        Task <span className="highlight">Manager</span>
-      </h1>
+    <div className="task-app">
+      <h1> Task Manager ✅</h1>
 
-      {/* TaskForm can be used for both Add & Edit */}
-      <TaskForm onSubmit={handleAddTask} initialTask={taskToEdit} />
+      <TaskForm onAddTask={handleAddTask} taskToEdit={taskToEdit} />
 
       <div className="task-list">
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onToggleComplete={handleToggleComplete}
-            onDelete={handleDeleteTask}
-            onEdit={handleEditTask}
-          />
-        ))}
+        {tasks.length === 0 ? (
+          <p className="empty-message">✨ Start by adding your first task! ✨</p>
+        ) : allCompleted ? (
+          <p className="all-done-message">🎉 Keep up the good work! All tasks completed! 🎉</p>
+        ) : (
+          tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onToggleComplete={handleToggleComplete}
+              onDeleteTask={handleDeleteTask}
+              onEditTask={(task) => setTaskToEdit(task)}
+            />
+          ))
+        )}
       </div>
     </div>
   );

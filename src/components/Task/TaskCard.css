@@ -1,115 +1,53 @@
 .task-card {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: left;
+  transition: all 0.3s ease;
 }
 
-.task-card:hover {
-  transform: translateY(-2px);
+.task-card.completed {
+  background: #f5fff5;
+  border-color: #8bc34a;
 }
 
 .task-title {
+  margin: 0;
   font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
 }
 
-.completed .task-title {
-  text-decoration: line-through;
-  color: #888;
-}
-
-.task-description {
-  margin: 6px 0;
+.task-desc {
+  margin: 5px 0;
   color: #555;
 }
 
 .task-meta {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
   font-size: 0.9rem;
+  margin-bottom: 10px;
 }
 
-.task-date {
-  color: #666;
-}
-
-.task-priority {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
+.priority.high {
+  color: red;
   font-weight: bold;
 }
 
-.task-priority.low {
-  background: #e6f9e6;
-  color: #2e7d32;
+.priority.medium {
+  color: orange;
 }
 
-.task-priority.medium {
-  background: #fff5cc;
-  color: #b36b00;
-}
-
-.task-priority.high {
-  background: #ffe5e5;
-  color: #b71c1c;
-}
-
-.task-status {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: #0077cc;
-}
-
-.completed .task-status {
-  color: #2e7d32;
-}
-
-/* Action Buttons */
-.task-actions {
-  margin-top: 12px;
-  display: flex;
-  gap: 8px;
+.priority.low {
+  color: green;
 }
 
 .task-actions button {
-  padding: 6px 12px;
+  margin-right: 8px;
+  padding: 5px 10px;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.85rem;
-  transition: 0.2s ease;
+  border-radius: 6px;
 }
 
-.btn-complete {
-  background: #0077cc;
-  color: #fff;
-}
-
-.btn-complete:hover {
-  background: #005fa3;
-}
-
-.btn-edit {
-  background: #ffcc00;
-  color: #333;
-}
-
-.btn-edit:hover {
-  background: #e6b800;
-}
-
-.btn-delete {
-  background: #cc0000;
-  color: #fff;
-}
-
-.btn-delete:hover {
-  background: #990000;
+.task-actions button:hover {
+  opacity: 0.8;
 }

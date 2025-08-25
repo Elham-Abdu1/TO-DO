@@ -1,46 +1,25 @@
 import React from "react";
 import "./TaskCard.css";
 
-const TaskCard = ({ task, onToggleComplete, onDelete, onEdit }) => {
+const TaskCard = ({ task, onToggleComplete, onDeleteTask, onEditTask }) => {
   return (
     <div className={`task-card ${task.completed ? "completed" : ""}`}>
-      {/* Title */}
-      <h2 className="task-title">{task.title}</h2>
-
-      {/* Description (hide if empty) */}
-      {task.description && (
-        <p className="task-description">{task.description}</p>
-      )}
-
-      {/* Due Date & Priority */}
-      <div className="task-meta">
-        <span className="task-date">
-          Due: {task.dueDate || "Not set"}
-        </span>
-        <span className={`task-priority ${task.priority.toLowerCase()}`}>
+      <h3 className="task-title">
+        {task.completed ? <s>{task.title}</s> : task.title}
+      </h3>
+      {task.description && <p className="task-desc">{task.description}</p>}
+      <p className="task-meta">
+        Due: {task.dueDate} | <span className={`priority ${task.priority.toLowerCase()}`}>
           {task.priority}
         </span>
-      </div>
+      </p>
 
-      {/* Completion status */}
-      <div className="task-status">
-        {task.completed ? "✅ Completed" : "⏳ Pending"}
-      </div>
-
-      {/* Action Buttons */}
       <div className="task-actions">
-        <button
-          className="btn-complete"
-          onClick={() => onToggleComplete(task.id)}
-        >
+        <button onClick={() => onToggleComplete(task.id)}>
           {task.completed ? "Undo" : "Complete"}
         </button>
-        <button className="btn-edit" onClick={() => onEdit(task.id)}>
-          Edit
-        </button>
-        <button className="btn-delete" onClick={() => onDelete(task.id)}>
-          Delete
-        </button>
+        <button onClick={() => onEditTask(task)}>Edit</button>
+        <button onClick={() => onDeleteTask(task.id)}>Delete</button>
       </div>
     </div>
   );
