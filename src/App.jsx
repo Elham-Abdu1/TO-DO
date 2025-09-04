@@ -1,88 +1,66 @@
-// // import React from 'react';
-// // import TaskCard from './components/TaskCard.jsx';
-// // import img from './assets/img.jpg';
-
-// // const App = () => {
-// //   const tasks = [
-// //     {
-// //       title: 'Go to At-Taqwa mesjid ',
-// //       dueDate: '2025-08-10',
-// //       imgSrc: img
-// //     },
-// //     {
-// //       title: 'Submit React Project',
-// //       dueDate: '2025-08-12',
-// //       imgSrc: img
-// //     },
-// //     {
-// //       title: 'Complete React Assignment',
-// //       dueDate: '2025-08-14',
-// //       imgSrc: img
-// //     },
-// //     {
-// //       title: 'Make physical exercise',
-// //       dueDate: '2025-08-14',
-// //       imgSrc: img
-// //     }
-// //   ];
-
-// //    return (
-// //     <div className="App">
-// //        <h1 style={{ textAlign: 'center', color: '#b98a0cff' }}>My Tasks</h1>
-// //       <div className="task-container">
-// //         {tasks.map((task, index) => (
-// //           <TaskCard 
-// //             key={index} 
-// //             title={task.title} 
-// //             dueDate={task.dueDate} 
-// //             imgSrc={task.imgSrc} 
-// //           />
-// //         ))}
-// //       </div>
-// //     </div>
-// //   );
-// // };
-// // export default App;
+// 
 
 
-// // import React from 'react';
-// // import TaskCard from './components/Task/TaskCard.jsx';
-
-// // function App() {
-// //     return (
-// //         <div className="App">
-// //             <TaskCard />
-// //         </div>
-// //     );
-// // }
-
-// // export default App;
-
-
-// import React from 'react';
-// import TaskApp from './components/Task/TaskApp.jsx';
-
-
-// const App = () => {
-//   return (
-//     <div>
-       
-//       <TaskApp />
-//     </div>
-//   );
-// };
-
-// export default App;
-
-
-import React from "react";
-import IslamicQuote from "./components/IslamicQuote";
-import "./App.css"; // Import external CSS
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState("");
+
+  // ✅ Task 2: Load tasks from localStorage on app load
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem("tasks"));
+    if (savedTasks) {
+      setTasks(savedTasks);
+    }
+  }, []);
+
+  // ✅ Task 1: Store tasks in localStorage whenever tasks change
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask = () => {
+    if (newTask.trim() === "") return;
+    const updatedTasks = [...tasks, { id: Date.now(), text: newTask }];
+    setTasks(updatedTasks);
+    setNewTask("");
+  };
+
+  const deleteTask = (id) => {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
+  };
+
   return (
-    <div>
-      <IslamicQuote />
+    <div className="container">
+      <h1 className="title">📌 My Tasks</h1>
+
+      <div className="task-input">
+        <input
+          type="text"
+          placeholder="Enter a new task..."
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
+        />
+        <button onClick={addTask}>Add</button>
+      </div>
+
+      <ul className="task-list">
+        {tasks.length === 0 ? (
+          <p className="empty">✨ No tasks yet. Add one above!</p>
+        ) : (
+          tasks.map((task) => (
+            <li key={task.id}>
+              {task.text}
+              <button className="delete" onClick={() => deleteTask(task.id)}>
+                ❌
+              </button>
+            </li>
+          ))
+        )}
+      </ul>
     </div>
   );
 }
