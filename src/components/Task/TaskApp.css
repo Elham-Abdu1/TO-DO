@@ -1,35 +1,93 @@
 .task-app {
-  max-width: 700px;
-  margin: auto;
+  background: #fff;
   padding: 20px;
-  text-align: center;
-  font-family: Arial, sans-serif;
+  border-radius: 12px;
+  max-width: 500px;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-h1 {
-  margin-bottom: 20px;
-  color: #333;
+.task-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.task-form input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.task-form button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.task-form button[type="submit"] {
+  background: #007bff;
+  color: #fff;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
 }
 
 .task-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
+}
+
+.task-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.task-card.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.actions button {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actions button:nth-child(1) {
+  background: #28a745;
+  color: white;
+}
+.actions button:nth-child(2) {
+  background: #ffc107;
+  color: black;
+}
+.actions button:nth-child(3) {
+  background: #dc3545;
+  color: white;
 }
 
 .empty-message {
-  font-size: 1.2rem;
-  color: #777;
-  background: #f0f0f0;
-  padding: 15px;
-  border-radius: 8px;
+  text-align: center;
+  color: #555;
+  font-style: italic;
 }
 
-.all-done-message {
-  font-size: 1.2rem;
+.success-message {
+  text-align: center;
   color: green;
   font-weight: bold;
-  background: #e6ffe6;
-  padding: 15px;
-  border-radius: 8px;
+  margin-bottom: 10px;
 }

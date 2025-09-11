@@ -1,9 +1,9 @@
-import React from "react";
+// import React from "react";
 
-const Spinner = () => {
-  return (
-    <div className="spinner"></div>
-  );
-};
+// const Spinner = () => {
+//   return (
+//     <div className="spinner"></div>
+//   );
+// };
 
-export default Spinner;
+// export default Spinner;

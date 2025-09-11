@@ -1,70 +1,88 @@
 import React, { useState } from "react";
+import useLocalStorage from "../../hooks/useLocalStorage";
 import TaskForm from "./TaskForm";
 import TaskCard from "./TaskCard";
 import "./TaskApp.css";
 
 const TaskApp = () => {
-  const [tasks, setTasks] = useState([]);
-  const [taskToEdit, setTaskToEdit] = useState(null);
+  const [tasks, setTasks] = useLocalStorage("tasks", []);
+  const [editingTask, setEditingTask] = useState(null);
 
-  // Add task
-  const handleAddTask = (task) => {
-    if (taskToEdit) {
-      handleEditTask(taskToEdit.id, task);
-      setTaskToEdit(null);
+  // ✅ Add or Update Task
+  const handleAddOrUpdateTask = (title) => {
+    if (!title.trim()) return;
+
+    if (editingTask) {
+      // update
+      setTasks(
+        tasks.map((task) =>
+          task.id === editingTask.id ? { ...task, title } : task
+        )
+      );
+      setEditingTask(null);
     } else {
-      setTasks([...tasks, { ...task, id: Date.now(), completed: false }]);
+      // add new
+      const newTask = {
+        id: Date.now(),
+        title,
+        completed: false,
+      };
+      setTasks([newTask, ...tasks]);
     }
   };
 
-  // Toggle complete
-  const handleToggleComplete = (taskId) => {
+  // ✅ Toggle Complete
+  const handleToggleComplete = (id) => {
     setTasks(
       tasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
+        task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
   };
 
-  // Delete task
-  const handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+  // ✅ Delete
+  const handleDeleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id));
   };
 
-  // Edit task
-  const handleEditTask = (taskId, updatedTaskData) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === taskId ? { ...task, ...updatedTaskData } : task
-      )
-    );
+  // ✅ Edit
+  const handleEditTask = (task) => {
+    setEditingTask(task);
   };
 
   // Derived state
-  const allCompleted = tasks.length > 0 && tasks.every((task) => task.completed);
+  const allComplete = tasks.length > 0 && tasks.every((t) => t.completed);
 
   return (
     <div className="task-app">
-      <h1> Task Manager ✅</h1>
+      <h2>Tasks</h2>
 
-      <TaskForm onAddTask={handleAddTask} taskToEdit={taskToEdit} />
+      {/* Task Form */}
+      <TaskForm
+        onSubmit={handleAddOrUpdateTask}
+        editingTask={editingTask}
+        clearEditing={() => setEditingTask(null)}
+      />
 
+      {/* Messages */}
+      {tasks.length === 0 && (
+        <p className="empty-message">✨ Start by adding your first task!</p>
+      )}
+      {allComplete && (
+        <p className="success-message">🎉 Keep up the good work!</p>
+      )}
+
+      {/* Task List */}
       <div className="task-list">
-        {tasks.length === 0 ? (
-          <p className="empty-message">✨ Start by adding your first task! ✨</p>
-        ) : allCompleted ? (
-          <p className="all-done-message">🎉 Keep up the good work! All tasks completed! 🎉</p>
-        ) : (
-          tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onToggleComplete={handleToggleComplete}
-              onDeleteTask={handleDeleteTask}
-              onEditTask={(task) => setTaskToEdit(task)}
-            />
-          ))
-        )}
+        {tasks.map((task) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            onToggleComplete={handleToggleComplete}
+            onDelete={handleDeleteTask}
+            onEdit={handleEditTask}
+          />
+        ))}
       </div>
     </div>
   );

@@ -1,85 +1,36 @@
 import React, { useState, useEffect } from "react";
-import "./TaskForm.css";
 
-const TaskForm = ({ onSubmit, initialTask }) => {
+const TaskForm = ({ onSubmit, editingTask, clearEditing }) => {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [priority, setPriority] = useState("Low");
 
-  // When editing, pre-fill the form
   useEffect(() => {
-    if (initialTask) {
-      setTitle(initialTask.title);
-      setDescription(initialTask.description || "");
-      setDueDate(initialTask.dueDate || "");
-      setPriority(initialTask.priority || "Low");
+    if (editingTask) {
+      setTitle(editingTask.title);
+    } else {
+      setTitle("");
     }
-  }, [initialTask]);
+  }, [editingTask]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const formData = {
-      title,
-      description,
-      dueDate,
-      priority,
-    };
-
-    onSubmit(formData);
-
-    // Reset after submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(title);
     setTitle("");
-    setDescription("");
-    setDueDate("");
-    setPriority("Low");
   };
 
   return (
     <form onSubmit={handleSubmit} className="task-form">
-      <div className="form-group">
-        <label>Title (required):</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Description (optional):</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Due Date:</label>
-        <input
-          type="date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Priority:</label>
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        >
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-      </div>
-
-      <button type="submit" className="btn-submit">
-        {initialTask ? "Update Task" : "Add Task"}
-      </button>
+      <input
+        type="text"
+        placeholder="Add or edit a task..."
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <button type="submit">{editingTask ? "Update" : "Add"}</button>
+      {editingTask && (
+        <button type="button" onClick={clearEditing} className="cancel-btn">
+          Cancel
+        </button>
+      )}
     </form>
   );
 };
