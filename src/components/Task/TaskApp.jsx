@@ -2,55 +2,65 @@ import React, { useState } from "react";
 import TaskForm from "./TaskForm";
 import TaskCard from "./TaskCard";
 
-const TaskApp = () => {
+const TaskApp = ({ filter = "all" }) => {
   const [tasks, setTasks] = useState([]);
-  const [taskToEdit, setTaskToEdit] = useState(null);
 
+  // 👉 Add task
   const handleAddTask = (taskData) => {
-    if (taskToEdit) {
-      setTasks((prev) =>
-        prev.map((task) =>
-          task.id === taskToEdit.id ? { ...task, ...taskData } : task
-        )
-      );
-      setTaskToEdit(null);
-    } else {
-      const newTask = {
-        id: Date.now(),
-        ...taskData,
-        completed: false,
-      };
-      setTasks([newTask, ...tasks]);
-    }
+    const newTask = {
+      id: Date.now(),
+      ...taskData,
+      completed: false,
+    };
+    setTasks([newTask, ...tasks]);
   };
 
+  // 👉 Toggle completion
   const handleToggleComplete = (taskId) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
-      )
+    const updated = tasks.map((task) =>
+      task.id === taskId ? { ...task, completed: !task.completed } : task
     );
+    setTasks(updated);
   };
 
+  // 👉 Delete task
   const handleDeleteTask = (taskId) => {
-    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+    const updated = tasks.filter((task) => task.id !== taskId);
+    setTasks(updated);
   };
 
-  const handleEditTask = (task) => {
-    setTaskToEdit(task);
+  // 👉 Edit task
+  const handleEditTask = (taskId, updatedData) => {
+    const updated = tasks.map((task) =>
+      task.id === taskId ? { ...task, ...updatedData } : task
+    );
+    setTasks(updated);
   };
+
+  // 👉 Filtering based on page
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "completed") return task.completed;
+    if (filter === "incompleted") return !task.completed;
+    return true; // default: show all
+  });
 
   return (
-    <div className="w-full max-w-xl bg-white shadow-lg rounded-xl p-6">
-      <TaskForm onSubmit={handleAddTask} taskToEdit={taskToEdit} />
+    <div className="p-6">
+      {filter === "all" && (
+        <TaskForm onSubmit={handleAddTask} />
+      )}
 
-      {tasks.length === 0 ? (
-        <p className="text-center text-gray-500 mt-6 italic">
-          🌱 Start by adding your first task!
-        </p>
-      ) : (
-        <div className="mt-6 space-y-4">
-          {tasks.map((task) => (
+      <div className="grid gap-4 mt-6">
+        {filteredTasks.length === 0 ? (
+          <p className="text-center text-gray-500">
+            {filter === "completed"
+              ? "No completed tasks yet!"
+              : filter === "incompleted"
+              ? "All tasks are completed 🎉"
+              : "Start by adding your first task!"}
+          </p>
+        ) : (
+          filteredTasks.map((task) => (
             <TaskCard
               key={task.id}
               task={task}
@@ -58,9 +68,9 @@ const TaskApp = () => {
               onDelete={handleDeleteTask}
               onEdit={handleEditTask}
             />
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 };

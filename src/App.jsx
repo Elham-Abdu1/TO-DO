@@ -1,15 +1,22 @@
-import React from "react";
-import TaskApp from "./components/Task/TaskApp";
+// src/App.jsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import Tasks from "./pages/Tasks";
+import Completed from "./pages/Completed";
+import Incompleted from "./pages/Incompleted";
 
-const App = () => {
+export default function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col items-center p-6">
-      <h1 className="text-3xl font-bold text-green-700 mb-6">
-        📖 My Islamic Task Manager
-      </h1>
-      <TaskApp />
-    </div>
-    );
-};
-
-export default App;
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="tasks" element={<Tasks />} />
+          <Route path="completed" element={<Completed />} />
+          <Route path="incompleted" element={<Incompleted />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
