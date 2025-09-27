@@ -1,89 +1,66 @@
 import React, { useState } from "react";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import TaskForm from "./TaskForm";
 import TaskCard from "./TaskCard";
-import "./TaskApp.css";
 
 const TaskApp = () => {
-  const [tasks, setTasks] = useLocalStorage("tasks", []);
-  const [editingTask, setEditingTask] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [taskToEdit, setTaskToEdit] = useState(null);
 
-  // ✅ Add or Update Task
-  const handleAddOrUpdateTask = (title) => {
-    if (!title.trim()) return;
-
-    if (editingTask) {
-      // update
-      setTasks(
-        tasks.map((task) =>
-          task.id === editingTask.id ? { ...task, title } : task
+  const handleAddTask = (taskData) => {
+    if (taskToEdit) {
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === taskToEdit.id ? { ...task, ...taskData } : task
         )
       );
-      setEditingTask(null);
+      setTaskToEdit(null);
     } else {
-      // add new
       const newTask = {
         id: Date.now(),
-        title,
+        ...taskData,
         completed: false,
       };
       setTasks([newTask, ...tasks]);
     }
   };
 
-  // ✅ Toggle Complete
-  const handleToggleComplete = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
+  const handleToggleComplete = (taskId) => {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task
       )
     );
   };
 
-  // ✅ Delete
-  const handleDeleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+  const handleDeleteTask = (taskId) => {
+    setTasks((prev) => prev.filter((task) => task.id !== taskId));
   };
 
-  // ✅ Edit
   const handleEditTask = (task) => {
-    setEditingTask(task);
+    setTaskToEdit(task);
   };
-
-  // Derived state
-  const allComplete = tasks.length > 0 && tasks.every((t) => t.completed);
 
   return (
-    <div className="task-app">
-      <h2>Tasks</h2>
+    <div className="w-full max-w-xl bg-white shadow-lg rounded-xl p-6">
+      <TaskForm onSubmit={handleAddTask} taskToEdit={taskToEdit} />
 
-      {/* Task Form */}
-      <TaskForm
-        onSubmit={handleAddOrUpdateTask}
-        editingTask={editingTask}
-        clearEditing={() => setEditingTask(null)}
-      />
-
-      {/* Messages */}
-      {tasks.length === 0 && (
-        <p className="empty-message">✨ Start by adding your first task!</p>
+      {tasks.length === 0 ? (
+        <p className="text-center text-gray-500 mt-6 italic">
+          🌱 Start by adding your first task!
+        </p>
+      ) : (
+        <div className="mt-6 space-y-4">
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onToggleComplete={handleToggleComplete}
+              onDelete={handleDeleteTask}
+              onEdit={handleEditTask}
+            />
+          ))}
+        </div>
       )}
-      {allComplete && (
-        <p className="success-message">🎉 Keep up the good work!</p>
-      )}
-
-      {/* Task List */}
-      <div className="task-list">
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onToggleComplete={handleToggleComplete}
-            onDelete={handleDeleteTask}
-            onEdit={handleEditTask}
-          />
-        ))}
-      </div>
     </div>
   );
 };
