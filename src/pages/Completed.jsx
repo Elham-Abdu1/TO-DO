@@ -1,13 +1,12 @@
 import React from "react";
-import TaskApp from "../components/Task/TaskApp";
 
-const Incompleted = () => {
+const Completed = () => {
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-center my-4">📝 Incompleted Tasks</h1>
-      <TaskApp filter="incompleted" />
+    <div className="p-10 text-center">
+      <h1 className="text-3xl font-bold text-green-700">✅ Completed Tasks</h1>
+      <p className="text-gray-600 mt-2">All your completed tasks will appear here.</p>
     </div>
   );
 };
 
-export default Incompleted;
+export default Completed;

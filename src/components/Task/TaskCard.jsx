@@ -2,45 +2,38 @@ import React from "react";
 
 const TaskCard = ({ task, onToggleComplete, onDelete, onEdit }) => {
   return (
-    <div
-      className={`p-4 border rounded-lg shadow-sm ${
-        task.completed ? "bg-green-50 line-through opacity-70" : "bg-white"
-      }`}
-    >
-      <h3 className="font-semibold text-lg text-green-800">{task.title}</h3>
-      {task.description && (
-        <p className="text-gray-600">{task.description}</p>
-      )}
-      <p className="text-sm text-gray-500">📅 {task.dueDate || "No due date"}</p>
-
-      <p
-        className={`text-sm font-medium mt-1 ${
-          task.priority === "High"
-            ? "text-red-600"
-            : task.priority === "Medium"
-            ? "text-yellow-600"
-            : "text-green-600"
+    <div className="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between hover:shadow-xl transition">
+      <h2
+        className={`text-lg font-semibold ${
+          task.completed ? "line-through text-gray-500" : ""
         }`}
       >
-        🔥 {task.priority} Priority
-      </p>
+        {task.title}
+      </h2>
+      <p className="text-sm text-gray-600">{task.date}</p>
 
-      <div className="mt-3 flex space-x-2">
+      <div className="flex gap-2 mt-4 flex-wrap">
         <button
-          className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
           onClick={() => onToggleComplete(task.id)}
+          className={`px-3 py-1 rounded text-white text-sm transition ${
+            task.completed
+              ? "bg-yellow-500 hover:bg-yellow-600"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
         >
           {task.completed ? "Undo" : "Complete"}
         </button>
+
         <button
-          className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-          onClick={() => onEdit(task)}
+          onClick={() => onEdit(task.id, { title: prompt("Edit Task", task.title) })}
+          className="px-3 py-1 rounded bg-blue-500 hover:bg-blue-600 text-white text-sm transition"
         >
           Edit
         </button>
+
         <button
-          className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
           onClick={() => onDelete(task.id)}
+          className="px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-sm transition"
         >
           Delete
         </button>

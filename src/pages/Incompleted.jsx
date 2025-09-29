@@ -1,11 +1,10 @@
 import React from "react";
-import TaskApp from "../components/Task/TaskApp";
 
 const Incompleted = () => {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">📝 Incompleted Tasks</h1>
-      <TaskApp filter="incompleted" />
+    <div className="p-10 text-center">
+      <h1 className="text-3xl font-bold text-red-600">❌ Incompleted Tasks</h1>
+      <p className="text-gray-600 mt-2">Your pending tasks will appear here.</p>
     </div>
   );
 };
