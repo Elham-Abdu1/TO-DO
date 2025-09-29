@@ -1,39 +1,40 @@
 import React from "react";
 
-const TaskCard = ({ task, onToggleComplete, onDelete, onEdit }) => {
+const TaskCard = ({ task, onToggleComplete, onEdit, onDelete }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between hover:shadow-xl transition">
+    <div
+      className={`p-4 rounded-xl shadow-md transition-transform transform hover:scale-105 ${
+        task.completed ? "bg-green-100 border-green-400" : "bg-white border"
+      }`}
+    >
       <h2
-        className={`text-lg font-semibold ${
-          task.completed ? "line-through text-gray-500" : ""
+        className={`text-lg font-bold ${
+          task.completed ? "line-through text-gray-500" : "text-gray-900"
         }`}
       >
         {task.title}
       </h2>
-      <p className="text-sm text-gray-600">{task.date}</p>
+      <p className="text-sm text-gray-600">{task.description}</p>
+      <p className="text-xs text-gray-500">Due: {task.dueDate}</p>
 
-      <div className="flex gap-2 mt-4 flex-wrap">
+      <div className="flex space-x-2 mt-3">
         <button
           onClick={() => onToggleComplete(task.id)}
-          className={`px-3 py-1 rounded text-white text-sm transition ${
-            task.completed
-              ? "bg-yellow-500 hover:bg-yellow-600"
-              : "bg-green-600 hover:bg-green-700"
-          }`}
+          className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
         >
           {task.completed ? "Undo" : "Complete"}
         </button>
 
         <button
-          onClick={() => onEdit(task.id, { title: prompt("Edit Task", task.title) })}
-          className="px-3 py-1 rounded bg-blue-500 hover:bg-blue-600 text-white text-sm transition"
+          onClick={() => onEdit(task)}
+          className="px-3 py-1 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
         >
           Edit
         </button>
 
         <button
           onClick={() => onDelete(task.id)}
-          className="px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-sm transition"
+          className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
         >
           Delete
         </button>

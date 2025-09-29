@@ -1,40 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const TaskForm = ({ onSubmit }) => {
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+const TaskForm = ({ onSubmit, taskToEdit, onClose }) => {
+  const [task, setTask] = useState({
+    title: "",
+    description: "",
+    dueDate: "",
+    priority: "low",
+    completed: false,
+  });
+
+  useEffect(() => {
+    if (taskToEdit) setTask(taskToEdit);
+  }, [taskToEdit]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setTask({ ...task, [name]: value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    onSubmit({ title, date });
-    setTitle("");
-    setDate("");
+    onSubmit(task);
+    setTask({ title: "", description: "", dueDate: "", priority: "low", completed: false });
+    if (onClose) onClose();
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col sm:flex-row gap-3 sm:items-center"
-    >
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Enter task"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+        name="title"
+        value={task.title}
+        onChange={handleChange}
+        placeholder="Task title"
+        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-green-400"
+        required
       />
+
+      <textarea
+        name="description"
+        value={task.description}
+        onChange={handleChange}
+        placeholder="Description"
+        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-green-400"
+      />
+
       <input
         type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+        name="dueDate"
+        value={task.dueDate}
+        onChange={handleChange}
+        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-green-400"
       />
+
+      <select
+        name="priority"
+        value={task.priority}
+        onChange={handleChange}
+        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-green-400"
+      >
+        <option value="low">Low Priority</option>
+        <option value="medium">Medium Priority</option>
+        <option value="high">High Priority</option>
+      </select>
+
       <button
         type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
+        className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg shadow-md transition-transform transform hover:scale-105"
       >
-        Add
+        {taskToEdit ? "Update Task" : "Add Task"}
       </button>
     </form>
   );
