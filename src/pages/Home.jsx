@@ -1,33 +1,43 @@
-import React from "react";
+import { useFetch } from "../hooks/useFetch";
+import { useState } from "react";
 
-const Home = () => {
+export default function Home() {
+  const [ayah, setAyah] = useState(Math.floor(Math.random() * 6236) + 1);
+  const { data, loading } = useFetch(`https://api.alquran.cloud/v1/ayah/${ayah}`);
+
+  const getNewVerse = () => setAyah(Math.floor(Math.random() * 6236) + 1);
+
   return (
-    <div className="px-4 sm:px-6 lg:px-12 py-8 text-center flex flex-col items-center">
-      {/* Title */}
-      <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-green-700 mb-8">
-        بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+    <div className="flex flex-col items-center justify-center text-center h-[80vh] px-6">
+      <h1 className="text-3xl sm:text-4xl font-bold text-emerald-300 mb-6 drop-shadow-lg">
+        Welcome to My Islamic To-Do
       </h1>
 
-      {/* Quotes Section */}
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 max-w-5xl w-full">
-        {/* Quote Card 1 */}
-        <div className="bg-white shadow-md rounded-2xl p-6 border hover:shadow-lg transition">
-          <p className="text-base sm:text-lg text-gray-700 italic">
-            “The most beloved of deeds to Allah are those that are most consistent, even if they are small.”
-          </p>
-          <p className="mt-4 text-green-600 font-semibold">– Prophet Muhammad ﷺ</p>
-        </div>
+      <div className="bg-white/10 backdrop-blur-md border border-emerald-400/30 rounded-3xl p-8 shadow-2xl w-full max-w-3xl">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-emerald-300 mb-4">
+          🕌 Daily Inspiration
+        </h2>
 
-        {/* Quote Card 2 */}
-        <div className="bg-white shadow-md rounded-2xl p-6 border hover:shadow-lg transition">
-          <p className="text-base sm:text-lg text-gray-700 italic">
-            “Indeed, Allah loves those who rely upon Him.”
-          </p>
-          <p className="mt-4 text-green-600 font-semibold">– Qur’an 3:159</p>
-        </div>
+        {loading ? (
+          <p className="text-gray-300 animate-pulse">Fetching verse...</p>
+        ) : (
+          <>
+            <p className="text-lg sm:text-xl italic text-emerald-100 leading-relaxed mb-4">
+              “{data?.data?.text}”
+            </p>
+            <p className="text-emerald-300 font-semibold">
+              — {data?.data?.surah?.englishName} ({data?.data?.numberInSurah})
+            </p>
+          </>
+        )}
+
+        <button
+          onClick={getNewVerse}
+          className="mt-6 bg-emerald-500 hover:bg-emerald-600 transition px-4 py-2 rounded-lg shadow-lg font-semibold"
+        >
+          New Verse
+        </button>
       </div>
     </div>
   );
-};
-
-export default Home;
+}

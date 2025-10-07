@@ -1,68 +1,115 @@
-import React, { useState } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useState } from "react";
 
-const Tasks = () => {
-  const [task, setTask] = useState("");
-  const [tasks, setTasks] = useState([]);
+export default function Tasks() {
+  const [tasks, setTasks] = useLocalStorage("tasks", []);
+  const [modal, setModal] = useState(false);
+  const [newTask, setNewTask] = useState({ title: "", desc: "", due: "" });
 
-  const addTask = (e) => {
-    e.preventDefault();
-    if (!task.trim()) return;
-    setTasks([...tasks, { id: Date.now(), text: task, completed: false }]);
-    setTask("");
+  const handleAdd = () => {
+    if (!newTask.title.trim()) return;
+    setTasks([...tasks, { ...newTask, id: Date.now(), completed: false }]);
+    setNewTask({ title: "", desc: "", due: "" });
+    setModal(false);
   };
 
-  const toggleTask = (id) => {
-    setTasks(
-      tasks.map((t) =>
-        t.id === id ? { ...t, completed: !t.completed } : t
-      )
-    );
+  const toggleComplete = (id) => {
+    setTasks(tasks.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)));
   };
 
   return (
-    <div className="p-6 md:p-12">
-      <h1 className="text-2xl md:text-3xl font-bold text-green-700 mb-6 text-center">
-        📋 Manage Your Tasks
-      </h1>
-
-      {/* Form */}
-      <form
-        onSubmit={addTask}
-        className="flex flex-col md:flex-row gap-4 items-center justify-center mb-8"
-      >
-        <input
-          type="text"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-          placeholder="Enter your task..."
-          className="w-full md:w-2/3 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-        />
+    <div className="text-white">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-bold text-emerald-300">📋 Your Tasks</h2>
         <button
-          type="submit"
-          className="px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 focus:ring-2 focus:ring-green-400 transition"
+          onClick={() => setModal(true)}
+          className="bg-emerald-500 hover:bg-emerald-600 transition px-4 py-2 rounded-lg shadow-lg font-semibold"
         >
-          Add Task
+          + Add Task
         </button>
-      </form>
+      </div>
 
-      {/* Task List */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {tasks.map((t) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tasks.length === 0 && (
+          <p className="text-gray-300 italic col-span-full text-center">
+            No tasks yet — add one above.
+          </p>
+        )}
+
+        {tasks.map((task) => (
           <div
-            key={t.id}
-            onClick={() => toggleTask(t.id)}
-            className={`cursor-pointer border rounded-lg p-4 shadow hover:shadow-md transition ${
-              t.completed
-                ? "bg-green-100 line-through text-gray-500"
-                : "bg-white"
+            key={task.id}
+            className={`rounded-3xl p-5 shadow-xl transition transform hover:scale-[1.03] hover:shadow-emerald-500/30 backdrop-blur-md border ${
+              task.completed
+                ? "bg-emerald-800/50 border-emerald-500/40"
+                : "bg-white/10 border-white/20"
             }`}
           >
-            {t.text}
+            <h3 className="text-xl font-semibold text-emerald-200 mb-2">
+              {task.title}
+            </h3>
+            <p className="text-gray-300 mb-2">{task.desc}</p>
+            <p className="text-sm text-emerald-300 mb-4">
+              📅 Due: {task.due || "—"}
+            </p>
+            <button
+              onClick={() => toggleComplete(task.id)}
+              className={`w-full py-2 rounded-xl transition font-semibold ${
+                task.completed
+                  ? "bg-gray-500 hover:bg-gray-600"
+                  : "bg-emerald-500 hover:bg-emerald-600"
+              }`}
+            >
+              {task.completed ? "Mark as Incomplete" : "Mark as Complete"}
+            </button>
           </div>
         ))}
       </div>
+
+      {modal && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-emerald-900/90 border border-emerald-500/30 rounded-3xl p-8 w-11/12 sm:w-[400px] shadow-2xl">
+            <h3 className="text-2xl mb-4 font-semibold text-emerald-300">
+              Add New Task
+            </h3>
+
+            <input
+              type="text"
+              placeholder="Task title"
+              value={newTask.title}
+              onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+              className="w-full mb-3 p-2 rounded-lg bg-white/20 placeholder-gray-300 focus:outline-none"
+            />
+            <textarea
+              placeholder="Task description"
+              value={newTask.desc}
+              onChange={(e) => setNewTask({ ...newTask, desc: e.target.value })}
+              className="w-full mb-3 p-2 rounded-lg bg-white/20 placeholder-gray-300 focus:outline-none"
+            />
+            <input
+              type="date"
+              value={newTask.due}
+              onChange={(e) => setNewTask({ ...newTask, due: e.target.value })}
+              className="w-full mb-4 p-2 rounded-lg bg-white/20 focus:outline-none"
+            />
+
+            <div className="flex justify-between">
+              <button
+                onClick={handleAdd}
+                className="bg-emerald-500 hover:bg-emerald-600 transition px-4 py-2 rounded-lg shadow-md"
+              >
+                Add
+              </button>
+              <button
+                onClick={() => setModal(false)}
+                className="bg-gray-500 hover:bg-gray-600 transition px-4 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
-
-export default Tasks;
+}

@@ -1,53 +1,42 @@
+import { Link, useLocation } from "react-router-dom";
 
-import { NavLink, Outlet } from "react-router-dom";
+export default function Layout({ children }) {
+  const location = useLocation();
 
-export default function Layout() {
+  const navItems = [
+    { path: "/", label: "Home" },
+    { path: "/tasks", label: "Task Manager" },
+    { path: "/completed", label: "Completed Tasks" },
+    { path: "/incompleted", label: "Incomplete Tasks" },
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col bg-green-50">
-      {/* Navbar */}
-      <nav className="bg-green-700 text-white p-4 flex justify-center gap-6">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? "font-bold border-b-2 border-yellow-400" : "hover:text-yellow-300"
-          }
-        >
-          Home
-        </NavLink>
-        <NavLink
-          to="/tasks"
-          className={({ isActive }) =>
-            isActive ? "font-bold border-b-2 border-yellow-400" : "hover:text-yellow-300"
-          }
-        >
-          Task Manager
-        </NavLink>
-        <NavLink
-          to="/completed"
-          className={({ isActive }) =>
-            isActive ? "font-bold border-b-2 border-yellow-400" : "hover:text-yellow-300"
-          }
-        >
-          Completed
-        </NavLink>
-        <NavLink
-          to="/incompleted"
-          className={({ isActive }) =>
-            isActive ? "font-bold border-b-2 border-yellow-400" : "hover:text-yellow-300"
-          }
-        >
-          Incompleted
-        </NavLink>
+    <div className="min-h-screen flex flex-col">
+      <nav className="bg-emerald-950/80 backdrop-blur-md py-4 px-6 flex justify-between items-center shadow-md">
+        <h1 className="text-xl sm:text-2xl font-bold text-emerald-300">
+          🌙 Islamic Task Manager
+        </h1>
+        <div className="flex flex-wrap gap-4 sm:gap-6">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`text-sm sm:text-lg transition font-medium ${
+                location.pathname === item.path
+                  ? "text-emerald-300 border-b-2 border-emerald-400 pb-1"
+                  : "text-gray-300 hover:text-emerald-300"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
       </nav>
 
-      {/* Page Content */}
-      <main className="flex-grow container mx-auto p-6">
-        <Outlet />
-      </main>
+      <main className="flex-grow px-4 sm:px-12 py-8">{children}</main>
 
-      {/* Footer */}
-      <footer className="bg-green-800 text-white text-center p-3">
-        © 2025 Islamic Task Manager | Baraka in productivity 🌙
+      <footer className="text-center text-gray-400 py-4 text-sm">
+        © {new Date().getFullYear()} Islamic Task Manager — by Elham Abdu
       </footer>
     </div>
   );
