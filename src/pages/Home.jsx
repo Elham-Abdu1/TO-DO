@@ -1,43 +1,39 @@
-import { useFetch } from "../hooks/useFetch";
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
 
 export default function Home() {
-  const [ayah, setAyah] = useState(Math.floor(Math.random() * 6236) + 1);
-  const { data, loading } = useFetch(`https://api.alquran.cloud/v1/ayah/${ayah}`);
-
-  const getNewVerse = () => setAyah(Math.floor(Math.random() * 6236) + 1);
+  const data = useFetch("https://api.alquran.cloud/v1/ayah/random");
 
   return (
-    <div className="flex flex-col items-center justify-center text-center h-[80vh] px-6">
-      <h1 className="text-3xl sm:text-4xl font-bold text-emerald-300 mb-6 drop-shadow-lg">
-        Welcome to My Islamic To-Do
-      </h1>
+    <div className="flex flex-col items-center justify-center text-center mt-20 px-4">
+      <h1 className="text-4xl font-bold mb-8 text-emerald-300">Welcome to My Islamic To-Do</h1>
 
-      <div className="bg-white/10 backdrop-blur-md border border-emerald-400/30 rounded-3xl p-8 shadow-2xl w-full max-w-3xl">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-emerald-300 mb-4">
-          🕌 Daily Inspiration
+      <div className="bg-gradient-to-br from-emerald-800 via-teal-900 to-cyan-950 shadow-lg rounded-2xl p-8 max-w-3xl">
+        <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
+          🌙 Daily Inspiration
         </h2>
-
-        {loading ? (
-          <p className="text-gray-300 animate-pulse">Fetching verse...</p>
-        ) : (
+        {data ? (
           <>
-            <p className="text-lg sm:text-xl italic text-emerald-100 leading-relaxed mb-4">
-              “{data?.data?.text}”
-            </p>
-            <p className="text-emerald-300 font-semibold">
-              — {data?.data?.surah?.englishName} ({data?.data?.numberInSurah})
-            </p>
+            <p className="italic text-lg mb-4">"{data.data.text}"</p>
+            <p className="text-sm text-gray-300">— {data.data.surah.englishName} {data.data.numberInSurah}</p>
           </>
+        ) : (
+          <p>Loading...</p>
         )}
-
         <button
-          onClick={getNewVerse}
-          className="mt-6 bg-emerald-500 hover:bg-emerald-600 transition px-4 py-2 rounded-lg shadow-lg font-semibold"
+          onClick={() => window.location.reload()}
+          className="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition"
         >
           New Verse
         </button>
       </div>
+
+      <Link
+        to="/tasks"
+        className="mt-8 bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold transition"
+      >
+        Go to Tasks
+      </Link>
     </div>
   );
 }

@@ -1,30 +1,20 @@
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import useLocalStorage from "../hooks/useLocalStorage";
 
-export default function Incompleted() {
+export default function IncompleteTasks() {
   const [tasks] = useLocalStorage("tasks", []);
-  const incompleted = tasks.filter((t) => !t.completed);
+  const incomplete = tasks.filter((t) => !t.completed);
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold text-emerald-300 mb-6">
-        🕒 Incomplete Tasks
-      </h2>
-      {incompleted.length === 0 ? (
-        <p className="text-gray-300 italic">All tasks are completed. Great job!</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {incompleted.map((t) => (
-            <div
-              key={t.id}
-              className="bg-white/10 border border-white/20 rounded-3xl p-5 shadow-lg"
-            >
-              <h3 className="text-xl text-emerald-200 font-semibold">{t.title}</h3>
-              <p className="text-gray-300 mb-2">{t.desc}</p>
-              <p className="text-sm text-emerald-300">📅 Due: {t.due}</p>
-            </div>
-          ))}
-        </div>
-      )}
+    <div className="mt-20 text-center">
+      <h2 className="text-2xl font-semibold mb-6 text-emerald-300">🕒 Incomplete Tasks</h2>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {incomplete.length ? incomplete.map((task) => (
+          <div key={task.id} className="bg-emerald-900 p-4 rounded-xl">
+            <h3 className="font-bold">{task.title}</h3>
+            <p>{task.desc}</p>
+          </div>
+        )) : <p>No incomplete tasks yet.</p>}
+      </div>
     </div>
   );
 }
